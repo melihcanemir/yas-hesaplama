@@ -42,13 +42,13 @@
     padding: 6px;
   }
   #day {
-    width: 90px;
+    width: 70px;
   }
   #month {
-    width: 130px;
+    width: 90px;
   }
   #year {
-    width: 90px;
+    width: 80px;
   }
   button {
     width: 100%;
@@ -117,8 +117,11 @@
   <div class="container">
     <label for="birthdate">DOĞUM TARİHİ GİRİN</label>
     <div class="selects">
-      <select id="day" aria-label="Gün"></select>
+      <select id="day" aria-label="Gün">
+        <option value="" disabled selected>Gün</option>
+      </select>
       <select id="month" aria-label="Ay">
+        <option value="" disabled selected>Ay</option>
         <option value="1">OCAK</option>
         <option value="2">ŞUBAT</option>
         <option value="3">MART</option>
@@ -132,7 +135,9 @@
         <option value="11">KASIM</option>
         <option value="12">ARALIK</option>
       </select>
-      <select id="year" aria-label="Yıl"></select>
+      <select id="year" aria-label="Yıl">
+        <option value="" disabled selected>Yıl</option>
+      </select>
     </div>
     <button id="calculate">HESAPLA</button>
     <div id="result">Yaşınız Burada Yazacak</div>
@@ -143,6 +148,7 @@
   const monthSelect = document.getElementById('month');
   const yearSelect = document.getElementById('year');
 
+  // Günleri ekleme
   for (let i = 1; i <= 31; i++) {
     const option = document.createElement('option');
     option.value = i;
@@ -150,6 +156,7 @@
     daySelect.appendChild(option);
   }
 
+  // Yılları ekleme
   const currentYear = new Date().getFullYear();
   for (let y = 1900; y <= currentYear; y++) {
     const option = document.createElement('option');
@@ -182,39 +189,37 @@
     const selectedMonth = parseInt(monthSelect.value);
     const selectedDay = parseInt(daySelect.value);
     const now = new Date();
+    if (!selectedYear || !selectedMonth) return;
     const lastDayOfMonth = new Date(selectedYear, selectedMonth, 0).getDate();
-    daySelect.innerHTML = '';
-    let dayAdded = false;
+    daySelect.innerHTML = '<option value="" disabled selected>Gün</option>';
     for (let d = 1; d <= lastDayOfMonth; d++) {
-      const candidateDate = new Date(selectedYear, selectedMonth - 1, d);
-      if (candidateDate > now) break;
       const option = document.createElement('option');
       option.value = d;
       option.textContent = d;
-      if (d === selectedDay) { option.selected = true; dayAdded = true; }
       daySelect.appendChild(option);
     }
-    if (!dayAdded) daySelect.value = 1;
+    if (selectedDay && selectedDay <= lastDayOfMonth) {
+      daySelect.value = selectedDay;
+    }
   }
 
   yearSelect.addEventListener('change', updateDayOptions);
   monthSelect.addEventListener('change', updateDayOptions);
-  updateDayOptions();
 
   document.getElementById('calculate').addEventListener('click', () => {
     const day = parseInt(daySelect.value);
     const month = parseInt(monthSelect.value);
     const year = parseInt(yearSelect.value);
-    const birthDate = new Date(year, month - 1, day);
-    const now = new Date();
     const resultDiv = document.getElementById('result');
-    if (birthDate > now) {
-      resultDiv.textContent = 'Gelecekteki tarih seçilemez!';
+    if (!day || !month || !year) {
+      resultDiv.textContent = 'Lütfen tüm alanları seçin!';
       resultDiv.classList.remove('bold');
       return;
     }
-    if (birthDate.getDate() !== day || birthDate.getMonth() + 1 !== month || birthDate.getFullYear() !== year) {
-      resultDiv.textContent = 'Geçersiz tarih seçimi!';
+    const birthDate = new Date(year, month - 1, day);
+    const now = new Date();
+    if (birthDate > now) {
+      resultDiv.textContent = 'Gelecekteki tarih seçilemez!';
       resultDiv.classList.remove('bold');
       return;
     }
