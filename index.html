@@ -35,16 +35,20 @@
     justify-content: center;
     gap: 15px;
     margin-bottom: 10px;
-    flex-wrap: wrap; /* Mobilde sarmalama için */
   }
   select {
-    width: 70px;
-    padding: 6px;
     border-radius: 6px;
     border: 1px solid #ccc;
+    padding: 6px;
+  }
+  #day {
+    width: 90px;
   }
   #month {
-    width: 110px;
+    width: 130px;
+  }
+  #year {
+    width: 90px;
   }
   button {
     width: 100%;
@@ -87,12 +91,17 @@
     .selects {
       gap: 10px;
     }
-    select {
-      width: 80px !important;
-      margin: 5px 5px !important;
+    #day {
+      width: 80px;
     }
     #month {
-      width: 100px !important;
+      width: 100px;
+    }
+    #year {
+      width: 80px;
+    }
+    select {
+      padding: 6px;
     }
     button {
       padding: 10px;
