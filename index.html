@@ -16,9 +16,10 @@
     background-color: #1da6cf;
     border-radius: 15px;
     padding: 20px;
-    width: 290px;
+    width: 370px;
     color: black;
     box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    text-align: center;
   }
   label {
     display: block;
@@ -29,16 +30,21 @@
     border-radius: 6px;
     text-align: center;
   }
+  .selects {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 10px;
+    flex-wrap: wrap; /* Mobilde sarmalama için */
+  }
   select {
     width: 70px;
     padding: 6px;
-    margin: 5px 10px;
     border-radius: 6px;
     border: 1px solid #ccc;
   }
-
   #month {
-    width: 100px; /* Ay seçici genişliği artırıldı */
+    width: 110px;
   }
   button {
     width: 100%;
@@ -68,28 +74,25 @@
     font-size: 1.3em;
   }
 
-  /* Mobil uyumluluk için */
+  /* Mobil uyumluluk */
   @media (max-width: 480px) {
     .container {
-      width: 95vw; /* Mobilde kutu ekran genişliğinin %95'i kadar */
+      width: 95vw;
       padding: 15px;
     }
     .container label {
       font-size: 1em;
       padding: 8px;
     }
-    div[style*="display: flex"] {
-           justify-content: center;
+    .selects {
       gap: 10px;
     }
     select {
-      width: 80px !important; /* Seçim kutularını biraz küçült */
-      margin: 3px 3px !important;
-      padding: 6px;
-      border-radius: 6px;
+      width: 80px !important;
+      margin: 5px 5px !important;
     }
     #month {
-      width: 100px !important; /* Ay seçici mobilde biraz daha dar */
+      width: 100px !important;
     }
     button {
       padding: 10px;
@@ -104,7 +107,7 @@
 <body>
   <div class="container">
     <label for="birthdate">DOĞUM TARİHİ GİRİN</label>
-    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+    <div class="selects">
       <select id="day" aria-label="Gün"></select>
       <select id="month" aria-label="Ay">
         <option value="1">OCAK</option>
@@ -149,13 +152,10 @@
   function calculateAge(day, month, year) {
     const now = new Date();
     const birthDate = new Date(year, month - 1, day);
-
     if (birthDate > now) return 'Geçersiz tarih';
-
     let years = now.getFullYear() - birthDate.getFullYear();
     let months = now.getMonth() - birthDate.getMonth();
     let days = now.getDate() - birthDate.getDate();
-
     if (days < 0) {
       months--;
       const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
@@ -173,22 +173,16 @@
     const selectedMonth = parseInt(monthSelect.value);
     const selectedDay = parseInt(daySelect.value);
     const now = new Date();
-
     const lastDayOfMonth = new Date(selectedYear, selectedMonth, 0).getDate();
-
     daySelect.innerHTML = '';
     let dayAdded = false;
     for (let d = 1; d <= lastDayOfMonth; d++) {
       const candidateDate = new Date(selectedYear, selectedMonth - 1, d);
       if (candidateDate > now) break;
-
       const option = document.createElement('option');
       option.value = d;
       option.textContent = d;
-      if (d === selectedDay) {
-        option.selected = true;
-        dayAdded = true;
-      }
+      if (d === selectedDay) { option.selected = true; dayAdded = true; }
       daySelect.appendChild(option);
     }
     if (!dayAdded) daySelect.value = 1;
@@ -196,30 +190,25 @@
 
   yearSelect.addEventListener('change', updateDayOptions);
   monthSelect.addEventListener('change', updateDayOptions);
-
   updateDayOptions();
 
   document.getElementById('calculate').addEventListener('click', () => {
     const day = parseInt(daySelect.value);
     const month = parseInt(monthSelect.value);
     const year = parseInt(yearSelect.value);
-
     const birthDate = new Date(year, month - 1, day);
     const now = new Date();
     const resultDiv = document.getElementById('result');
-
     if (birthDate > now) {
       resultDiv.textContent = 'Gelecekteki tarih seçilemez!';
       resultDiv.classList.remove('bold');
       return;
     }
-
     if (birthDate.getDate() !== day || birthDate.getMonth() + 1 !== month || birthDate.getFullYear() !== year) {
       resultDiv.textContent = 'Geçersiz tarih seçimi!';
       resultDiv.classList.remove('bold');
       return;
     }
-
     const result = calculateAge(day, month, year);
     resultDiv.textContent = result;
     resultDiv.classList.add('bold');
