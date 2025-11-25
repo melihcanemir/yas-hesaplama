@@ -3,230 +3,317 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Doğum Tarihi Hesapla</title>
+<title>Yaş ve Tarih Arası Hesaplama</title>
+
 <style>
   body {
-    font-family: Arial, sans-serif;
-    background-color: white;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    background: #f2f7fa;
     display: flex;
-    justify-content: center;
-    padding: 40px;
-  }
-  .container {
-    background-color: #1da6cf;
-    border-radius: 15px;
-    padding: 20px;
-    width: 370px;
-    color: black;
-    box-shadow: 0 0 8px rgba(0,0,0,0.2);
-    text-align: center;
-  }
-  label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: bold;
-    background: white;
-    padding: 10px;
-    border-radius: 6px;
-    text-align: center;
-  }
-  .selects {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 10px;
-  }
-  select {
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    padding: 6px;
-  }
-  #day {
-    width: 70px;
-  }
-  #month {
-    width: 110px;
-  }
-  #year {
-    width: 80px;
-  }
-  button {
-    width: 100%;
-    background-color: #d4d4d4;
-    border: none;
-    padding: 12px;
-    margin-top: 15px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  button:hover {
-    background-color: #bdbdbd;
-  }
-  #result {
-    background: white;
-    margin-top: 20px;
-    text-align: center;
-    padding: 12px;
-    border-radius: 8px;
-    font-weight: normal;
-    font-size: 0.9em;
-    transition: all 0.3s ease;
-  }
-  #result.bold {
-    font-weight: bold;
-    font-size: 1.3em;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 10px;
   }
 
-  /* Mobil uyumluluk */
-  @media (max-width: 480px) {
-    .container {
-      width: 95vw;
-      padding: 15px;
+  /* EN ÜST BAŞLIK */
+  .page-title {
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: 800;
+    color: #0d5063;
+    margin-bottom: 40px;
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+  }
+
+  .page-title::before,
+  .page-title::after {
+    content: "";
+    display: block;
+    height: 3px;
+    background: #1da6cf;
+    margin: 8px 0;
+  }
+
+  .page-title::before {
+    width: 80%;
+    margin-left: 10%;
+  }
+
+  .page-title::after {
+    width: 60%;
+    margin-left: 20%;
+  }
+
+  /* KUTULARI ORTALAYAN DIŞ KAPSAYICI */
+  .wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 35px;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  /* Mobil görünümde kutular üst üste gelsin */
+  @media (max-width: 768px) {
+    .wrapper {
+      flex-direction: column;
+      gap: 25px;
     }
-    .container label {
-      font-size: 1em;
-      padding: 8px;
-    }
-    .selects {
-      gap: 10px;
-    }
-    #day {
-      width: 80px;
-    }
-    #month {
-      width: 100px;
-    }
-    #year {
-      width: 80px;
-    }
-    select {
-      padding: 6px;
-    }
-    button {
-      padding: 10px;
-      font-size: 1em;
-    }
-    #result {
-      font-size: 0.9em;
-    }
+  }
+
+  .container {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 25px;
+    width: 380px;
+    color: #1a1a1a;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+    border: 1px solid #e5e9ec;
+    transition: 0.3s ease;
+  }
+
+  .container:hover {
+    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+  }
+
+  .title {
+    font-size: 1.15em;
+    font-weight: 700;
+    padding-bottom: 5px;
+    color: #0d5063;
+  }
+
+  .subtitle {
+    font-size: 0.9em;
+    color: #5a5a5a;
+    margin-bottom: 20px;
+    margin-top: -5px;
+  }
+
+  .selects {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  select {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #cfd8dc;
+    background: #f8fbfc;
+    font-size: 0.95em;
+    transition: 0.25s ease;
+  }
+
+  select:focus {
+    outline: none;
+    border-color: #1da6cf;
+    box-shadow: 0 0 6px rgba(29,166,207,0.3);
+  }
+
+  button {
+    width: 100%;
+    background: linear-gradient(135deg, #1da6cf, #1389aa);
+    border: none;
+    padding: 14px;
+    margin-top: 15px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+    color: white;
+    transition: 0.25s ease;
+  }
+
+  button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+
+  #result, .result2 {
+    background: #f8fbfc;
+    border: 1px solid #dce3e6;
+    margin-top: 18px;
+    text-align: center;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 0.95em;
+    transition: 0.3s ease;
+  }
+
+  .bold {
+    font-weight: bold;
+    font-size: 1.15em;
+    color: #0d5063;
   }
 </style>
 </head>
+
 <body>
+
+<div class="page-title">İSMAİL EMİR</div>
+
+<div class="wrapper">
+
+  <!-- 1. KUTU – YAŞ HESAPLAMA -->
   <div class="container">
-    <label for="birthdate">DOĞUM TARİHİ GİRİN</label>
+    <div class="title">YAŞ HESAPLAMA</div>
+    <div class="subtitle">Doğum Tarihi Girin</div>
+
     <div class="selects">
-      <select id="day" aria-label="Gün">
-        <option value="" disabled selected>Gün</option>
-      </select>
-      <select id="month" aria-label="Ay">
+      <select id="day"><option value="" disabled selected>Gün</option></select>
+      <select id="month">
         <option value="" disabled selected>Ay</option>
-        <option value="1">OCAK</option>
-        <option value="2">ŞUBAT</option>
-        <option value="3">MART</option>
-        <option value="4">NİSAN</option>
-        <option value="5">MAYIS</option>
-        <option value="6">HAZİRAN</option>
-        <option value="7">TEMMUZ</option>
-        <option value="8">AĞUSTOS</option>
-        <option value="9">EYLÜL</option>
-        <option value="10">EKİM</option>
-        <option value="11">KASIM</option>
-        <option value="12">ARALIK</option>
+        <option value="1">OCAK</option><option value="2">ŞUBAT</option>
+        <option value="3">MART</option><option value="4">NİSAN</option>
+        <option value="5">MAYIS</option><option value="6">HAZİRAN</option>
+        <option value="7">TEMMUZ</option><option value="8">AĞUSTOS</option>
+        <option value="9">EYLÜL</option><option value="10">EKİM</option>
+        <option value="11">KASIM</option><option value="12">ARALIK</option>
       </select>
-      <select id="year" aria-label="Yıl">
-        <option value="" disabled selected>Yıl</option>
-      </select>
+      <select id="year"><option value="" disabled selected>Yıl</option></select>
     </div>
+
     <button id="calculate">HESAPLA</button>
-    <div id="result">Yaşınız Burada Yazacak</div>
+    <div id="result">Yaşınız burada görünecek</div>
   </div>
 
+  <!-- 2. KUTU – İKİ TARİH ARASI -->
+  <div class="container">
+    <div class="title">İKİ TARİH ARASI FARKI HESAPLAMA</div>
+    <div class="subtitle">Tarihleri girin</div>
+
+    <div class="selects">
+      <select id="d1"><option value="" disabled selected>Gün</option></select>
+      <select id="m1">
+        <option value="" disabled selected>Ay</option>
+        <option value="1">OCAK</option><option value="2">ŞUBAT</option>
+        <option value="3">MART</option><option value="4">NİSAN</option>
+        <option value="5">MAYIS</option><option value="6">HAZİRAN</option>
+        <option value="7">TEMMUZ</option><option value="8">AĞUSTOS</option>
+        <option value="9">EYLÜL</option><option value="10">EKİM</option>
+        <option value="11">KASIM</option><option value="12">ARALIK</option>
+      </select>
+      <select id="y1"><option value="" disabled selected>Yıl</option></select>
+    </div>
+
+    <div class="selects">
+      <select id="d2"><option value="" disabled selected>Gün</option></select>
+      <select id="m2">
+        <option value="" disabled selected>Ay</option>
+        <option value="1">OCAK</option><option value="2">ŞUBAT</option>
+        <option value="3">MART</option><option value="4">NİSAN</option>
+        <option value="5">MAYIS</option><option value="6">HAZİRAN</option>
+        <option value="7">TEMMUZ</option><option value="8">AĞUSTOS</option>
+        <option value="9">EYLÜL</option><option value="10">EKİM</option>
+        <option value="11">KASIM</option><option value="12">ARALIK</option>
+      </select>
+      <select id="y2"><option value="" disabled selected>Yıl</option></select>
+    </div>
+
+    <button id="calcBetween">HESAPLA</button>
+    <div class="result2" id="result2">Sonuç burada görünecek</div>
+  </div>
+
+</div>
+
+
 <script>
-  const daySelect = document.getElementById('day');
-  const monthSelect = document.getElementById('month');
-  const yearSelect = document.getElementById('year');
-
-  // Günleri ekleme
-  for (let i = 1; i <= 31; i++) {
-    const option = document.createElement('option');
-    option.value = i;
-    option.textContent = i;
-    daySelect.appendChild(option);
+/* ========= GENEL FONKSİYONLAR ========= */
+function isEmpty(v){ return v==="" || v=="Gün" || v=="Ay" || v=="Yıl"; }
+function fillNumbers(sel, count){
+  for(let i=1; i<=count; i++){
+    let o=document.createElement("option");
+    o.value=i;
+    o.textContent=i;
+    sel.appendChild(o);
   }
-
-  // Yılları ekleme
-  const currentYear = new Date().getFullYear();
-  for (let y = 1900; y <= currentYear; y++) {
-    const option = document.createElement('option');
-    option.value = y;
-    option.textContent = y;
-    yearSelect.appendChild(option);
+}
+function fillYears(sel){
+  let cy=new Date().getFullYear();
+  for(let y=1900; y<=cy; y++){
+    let o=document.createElement("option");
+    o.value=y;
+    o.textContent=y;
+    sel.appendChild(o);
   }
-
-  function calculateAge(day, month, year) {
-    const now = new Date();
-    const birthDate = new Date(year, month - 1, day);
-    if (birthDate > now) return 'Geçersiz tarih';
-    let years = now.getFullYear() - birthDate.getFullYear();
-    let months = now.getMonth() - birthDate.getMonth();
-    let days = now.getDate() - birthDate.getDate();
-    if (days < 0) {
-      months--;
-      const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-      days += prevMonth.getDate();
-    }
-    if (months < 0) {
-      years--;
-      months += 12;
-    }
-    return `${years} YIL ${months} AY ${days} GÜN`;
+}
+function fixDays(d, m, y){
+  if(!m.value || !y.value) return;
+  let last=new Date(parseInt(y.value), parseInt(m.value), 0).getDate();
+  let saved=d.value;
+  d.innerHTML='<option value="" disabled selected>Gün</option>';
+  for(let i=1; i<=last; i++){
+    let o=document.createElement("option");
+    o.value=i;
+    o.textContent=i;
+    d.appendChild(o);
   }
+  if(saved<=last) d.value=saved;
+}
+function diffDates(d1,m1,y1,d2,m2,y2){
+  const a=new Date(y1,m1-1,d1);
+  const b=new Date(y2,m2-1,d2);
+  if(a>b) return "İlk tarih ikinci tarihten büyük olamaz!";
+  let Y=b.getFullYear()-a.getFullYear();
+  let M=b.getMonth()-a.getMonth();
+  let D=b.getDate()-a.getDate();
+  if(D<0){ M--; D += new Date(b.getFullYear(),b.getMonth(),0).getDate(); }
+  if(M<0){ Y--; M+=12; }
+  return `${Y} YIL ${M} AY ${D} GÜN`;
+}
 
-  function updateDayOptions() {
-    const selectedYear = parseInt(yearSelect.value);
-    const selectedMonth = parseInt(monthSelect.value);
-    const selectedDay = parseInt(daySelect.value);
-    const now = new Date();
-    if (!selectedYear || !selectedMonth) return;
-    const lastDayOfMonth = new Date(selectedYear, selectedMonth, 0).getDate();
-    daySelect.innerHTML = '<option value="" disabled selected>Gün</option>';
-    for (let d = 1; d <= lastDayOfMonth; d++) {
-      const option = document.createElement('option');
-      option.value = d;
-      option.textContent = d;
-      daySelect.appendChild(option);
-    }
-    if (selectedDay && selectedDay <= lastDayOfMonth) {
-      daySelect.value = selectedDay;
-    }
+/* ========= YAŞ HESAPLAMA ========= */
+const day=document.getElementById("day");
+const month=document.getElementById("month");
+const year=document.getElementById("year");
+fillNumbers(day,31); 
+fillYears(year);
+month.addEventListener("change",()=>fixDays(day,month,year));
+year.addEventListener("change",()=>fixDays(day,month,year));
+document.getElementById("calculate").onclick = () => {
+  if(isEmpty(day.value)||isEmpty(month.value)||isEmpty(year.value)){
+    result.textContent="Lütfen tüm alanları seçin!";
+    result.classList.remove("bold");
+    return;
   }
+  let now=new Date();
+  result.textContent = diffDates(day.value, month.value, year.value,
+    now.getDate(), now.getMonth()+1, now.getFullYear()
+  );
+  result.classList.add("bold");
+};
 
-  yearSelect.addEventListener('change', updateDayOptions);
-  monthSelect.addEventListener('change', updateDayOptions);
-
-  document.getElementById('calculate').addEventListener('click', () => {
-    const day = parseInt(daySelect.value);
-    const month = parseInt(monthSelect.value);
-    const year = parseInt(yearSelect.value);
-    const resultDiv = document.getElementById('result');
-    if (!day || !month || !year) {
-      resultDiv.textContent = 'Lütfen tüm alanları seçin!';
-      resultDiv.classList.remove('bold');
-      return;
-    }
-    const birthDate = new Date(year, month - 1, day);
-    const now = new Date();
-    if (birthDate > now) {
-      resultDiv.textContent = 'Gelecekteki tarih seçilemez!';
-      resultDiv.classList.remove('bold');
-      return;
-    }
-    const result = calculateAge(day, month, year);
-    resultDiv.textContent = result;
-    resultDiv.classList.add('bold');
-  });
+/* ========= TARİH ARASI ========= */
+const d1=document.getElementById("d1");
+const m1=document.getElementById("m1");
+const y1=document.getElementById("y1");
+const d2=document.getElementById("d2");
+const m2=document.getElementById("m2");
+const y2=document.getElementById("y2");
+fillNumbers(d1,31); fillNumbers(d2,31);
+fillYears(y1); fillYears(y2);
+m1.addEventListener("change",()=>fixDays(d1,m1,y1));
+y1.addEventListener("change",()=>fixDays(d1,m1,y1));
+m2.addEventListener("change",()=>fixDays(d2,m2,y2));
+y2.addEventListener("change",()=>fixDays(d2,m2,y2));
+calcBetween.onclick = () => {
+  if(isEmpty(d1.value)||isEmpty(m1.value)||isEmpty(y1.value)||
+     isEmpty(d2.value)||isEmpty(m2.value)||isEmpty(y2.value)){
+    result2.textContent="Lütfen tüm alanları seçin!";
+    result2.classList.remove("bold");
+    return;
+  }
+  result2.textContent = diffDates(d1.value,m1.value,y1.value,d2.value,m2.value,y2.value);
+  result2.classList.add("bold");
+};
 </script>
+
 </body>
 </html>
