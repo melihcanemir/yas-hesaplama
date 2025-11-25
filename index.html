@@ -38,7 +38,7 @@
   }
 
   #month {
-    width: 100px;
+    width: 100px; /* Ay seçici genişliği artırıldı */
   }
   button {
     width: 100%;
@@ -71,7 +71,7 @@
   /* Mobil uyumluluk için */
   @media (max-width: 480px) {
     .container {
-      width: 95vw; 
+      width: 95vw; /* Mobilde kutu ekran genişliğinin %95'i kadar */
       padding: 15px;
     }
     .container label {
@@ -83,14 +83,14 @@
       justify-content: center;
       gap: 10px;
     }
- 
     select {
-    width: 70px !important; /* Seçim kutularını biraz küçült */
-    margin: 5px 5px !important;
-  }
-  #month {
-    width: 90px !important; /* Ay seçici mobilde biraz daha dar */
-  }on {
+      width: 70px !important; /* Seçim kutularını biraz küçült */
+      margin: 5px 5px !important;
+    }
+    #month {
+      width: 100px !important; /* Ay seçici mobilde biraz daha dar */
+    }
+    button {
       padding: 10px;
       font-size: 1em;
     }
