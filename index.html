@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Doğum Tarihi Hesapla</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+  }
+  .container {
+    background-color: #1da6cf;
+    border-radius: 15px;
+    padding: 20px;
+    width: 290px;
+    color: black;
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+  }
+  label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    background: white;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+  }
+  select {
+    width: 70px;
+    padding: 6px;
+    margin: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+
+  #month {
+    width: 100px;
+  }
+  button {
+    width: 100%;
+    background-color: #d4d4d4;
+    border: none;
+    padding: 12px;
+    margin-top: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #bdbdbd;
+  }
+  #result {
+    background: white;
+    margin-top: 20px;
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: normal;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+  }
+  #result.bold {
+    font-weight: bold;
+    font-size: 1.3em;
+  }
+
+  /* Mobil uyumluluk için */
+  @media (max-width: 480px) {
+    .container {
+      width: 95vw; 
+      padding: 15px;
+    }
+    .container label {
+      font-size: 1em;
+      padding: 8px;
+    }
+    div[style*="display: flex"] {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    select {
+      width: 60px !important; 
+      margin: 5px 5px !important;
+    }
+    #month {
+      width: 90px !important; 
+    }
+    button {
+      padding: 10px;
+      font-size: 1em;
+    }
+    #result {
+      font-size: 0.9em;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <label for="birthdate">DOĞUM TARİHİ GİRİN</label>
+    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+      <select id="day" aria-label="Gün"></select>
+      <select id="month" aria-label="Ay">
+        <option value="1">OCAK</option>
+        <option value="2">ŞUBAT</option>
+        <option value="3">MART</option>
+        <option value="4">NİSAN</option>
+        <option value="5">MAYIS</option>
+        <option value="6">HAZİRAN</option>
+        <option value="7">TEMMUZ</option>
+        <option value="8">AĞUSTOS</option>
+        <option value="9">EYLÜL</option>
+        <option value="10">EKİM</option>
+        <option value="11">KASIM</option>
+        <option value="12">ARALIK</option>
+      </select>
+      <select id="year" aria-label="Yıl"></select>
+    </div>
+    <button id="calculate">HESAPLA</button>
+    <div id="result">Yaşınız Burada Yazacak</div>
+  </div>
+
+<script>
+  const daySelect = document.getElementById('day');
+  const monthSelect = document.getElementById('month');
+  const yearSelect = document.getElementById('year');
+
+  for (let i = 1; i <= 31; i++) {
+    const option = document.createElement('option');
+    option.value = i;
+    option.textContent = i;
+    daySelect.appendChild(option);
+  }
+
+  const currentYear = new Date().getFullYear();
+  for (let y = 1900; y <= currentYear; y++) {
+    const option = document.createElement('option');
+    option.value = y;
+    option.textContent = y;
+    yearSelect.appendChild(option);
+  }
+
+  function calculateAge(day, month, year) {
+    const now = new Date();
+    const birthDate = new Date(year, month - 1, day);
+
+    if (birthDate > now) return 'Geçersiz tarih';
+
+    let years = now.getFullYear() - birthDate.getFullYear();
+    let months = now.getMonth() - birthDate.getMonth();
+    let days = now.getDate() - birthDate.getDate();
+
+    if (days < 0) {
+      months--;
+      const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+      days += prevMonth.getDate();
+    }
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+    return `${years} YIL ${months} AY ${days} GÜN`;
+  }
+
+  function updateDayOptions() {
+    const selectedYear = parseInt(yearSelect.value);
+    const selectedMonth = parseInt(monthSelect.value);
+    const selectedDay = parseInt(daySelect.value);
+    const now = new Date();
+
+    const lastDayOfMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+
+    daySelect.innerHTML = '';
+    let dayAdded = false;
+    for (let d = 1; d <= lastDayOfMonth; d++) {
+      const candidateDate = new Date(selectedYear, selectedMonth - 1, d);
+      if (candidateDate > now) break;
+
+      const option = document.createElement('option');
+      option.value = d;
+      option.textContent = d;
+      if (d === selectedDay) {
+        option.selected = true;
+        dayAdded = true;
+      }
+      daySelect.appendChild(option);
+    }
+    if (!dayAdded) daySelect.value = 1;
+  }
+
+  yearSelect.addEventListener('change', updateDayOptions);
+  monthSelect.addEventListener('change', updateDayOptions);
+
+  updateDayOptions();
+
+  document.getElementById('calculate').addEventListener('click', () => {
+    const day = parseInt(daySelect.value);
+    const month = parseInt(monthSelect.value);
+    const year = parseInt(yearSelect.value);
+
+    const birthDate = new Date(year, month - 1, day);
+    const now = new Date();
+    const resultDiv = document.getElementById('result');
+
+    if (birthDate > now) {
+      resultDiv.textContent = 'Gelecekteki tarih seçilemez!';
+      resultDiv.classList.remove('bold');
+      return;
+    }
+
+    if (birthDate.getDate() !== day || birthDate.getMonth() + 1 !== month || birthDate.getFullYear() !== year) {
+      resultDiv.textContent = 'Geçersiz tarih seçimi!';
+      resultDiv.classList.remove('bold');
+      return;
+    }
+
+    const result = calculateAge(day, month, year);
+    resultDiv.textContent = result;
+    resultDiv.classList.add('bold');
+  });
+</script>
+</body>
+</html>
